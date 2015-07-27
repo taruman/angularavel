@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace angularavel\Jobs;
 
 use Illuminate\Bus\Queueable;
 

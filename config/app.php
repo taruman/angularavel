@@ -140,9 +140,9 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        angularavel\Providers\AppServiceProvider::class,
+        angularavel\Providers\EventServiceProvider::class,
+        angularavel\Providers\RouteServiceProvider::class,
 
     ],
 

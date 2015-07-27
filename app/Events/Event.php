@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace angularavel\Events;
 
 abstract class Event
 {
