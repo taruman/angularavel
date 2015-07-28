@@ -19,3 +19,14 @@ $factory->define(angularavel\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(angularavel\Cliente::class, function (Faker\Generator $faker) {
+    return [
+        'nome' => $faker->name,
+        'responsavel' => $faker->name,
+        'email' => $faker->email,
+        'telefone' => $faker->phoneNumber,
+        'endereco' => $faker->address,
+        'obs' => $faker->sentence,
+    ];
+});
