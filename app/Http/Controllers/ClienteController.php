@@ -28,7 +28,9 @@ class ClienteController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        return Cliente::where('id', $id)->update($input);
+        $cliente = Cliente::find($id);
+        $cliente->update($input);
+        return $cliente;
     }
 
     public function destroy($id)
