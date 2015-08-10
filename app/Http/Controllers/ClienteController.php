@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use angularavel\Http\Requests;
 use angularavel\Http\Controllers\Controller;
-use angularavel\Cliente;
+use angularavel\Models\Cliente;
 
 class ClienteController extends Controller
 {

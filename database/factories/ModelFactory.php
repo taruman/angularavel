@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(angularavel\User::class, function (Faker\Generator $faker) {
+$factory->define(angularavel\Models\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
@@ -20,7 +20,7 @@ $factory->define(angularavel\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(angularavel\Cliente::class, function (Faker\Generator $faker) {
+$factory->define(angularavel\Models\Cliente::class, function (Faker\Generator $faker) {
     return [
         'nome' => $faker->name,
         'responsavel' => $faker->name,

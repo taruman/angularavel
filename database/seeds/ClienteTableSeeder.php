@@ -11,7 +11,7 @@ class ClienteTableSeeder extends Seeder
      */
     public function run()
     {
-        \angularavel\Cliente::truncate();
-        factory(\angularavel\Cliente::class, 10)->create();
+        \angularavel\Models\Cliente::truncate();
+        factory(\angularavel\Models\Cliente::class, 10)->create();
     }
 }
