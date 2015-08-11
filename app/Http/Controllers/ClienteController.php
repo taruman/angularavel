@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use angularavel\Http\Requests;
 use angularavel\Http\Controllers\Controller;
 use angularavel\Models\Cliente;
+use angularavel\Repositories\ClienteRepositoryEloquent;
 
 class ClienteController extends Controller
 {
-    public function index()
+    public function index(ClienteRepositoryEloquent $repository)
     {
-        return Cliente::all();
+        return $repository->all();
     }
 
     public function store(Request $request)
