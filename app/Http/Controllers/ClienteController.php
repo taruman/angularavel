@@ -3,40 +3,44 @@
 namespace angularavel\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use angularavel\Http\Requests;
-use angularavel\Http\Controllers\Controller;
-use angularavel\Models\Cliente;
-use angularavel\Repositories\ClienteRepositoryEloquent;
+use angularavel\Repositories\ClienteRepository;
 
 class ClienteController extends Controller
 {
-    public function index(ClienteRepositoryEloquent $repository)
+
+    private $repository;
+
+    public function __construct(ClienteRepository $repository)
     {
-        return $repository->all();
+        $this->repository = $repository;
+    }
+
+    public function index()
+    {
+        return $this->repository->all();
     }
 
     public function store(Request $request)
     {
-        return Cliente::create($request->all());
+        return $this->repository->create($request->all());
     }
 
     public function show($id)
     {
-        return Cliente::find($id);
+        return $this->repository->find($id);
     }
 
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $cliente = Cliente::find($id);
+        $cliente = $this->repository->find($id);
         $cliente->update($input);
         return $cliente;
     }
 
     public function destroy($id)
     {
-        $cliente = Cliente::find($id);
+        $cliente = $this->repository->find($id);
         $cliente->delete();
     }
 }

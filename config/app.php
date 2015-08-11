@@ -144,6 +144,7 @@ return [
         angularavel\Providers\AppServiceProvider::class,
         angularavel\Providers\EventServiceProvider::class,
         angularavel\Providers\RouteServiceProvider::class,
+        angularavel\Providers\AngularavelRepositoryProvider::class,
 
     ],
 
