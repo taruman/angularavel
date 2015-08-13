@@ -4,15 +4,18 @@ namespace angularavel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use angularavel\Repositories\ClienteRepository;
+use angularavel\Services\ClienteService;
 
 class ClienteController extends Controller
 {
 
     private $repository;
+    private $service;
 
-    public function __construct(ClienteRepository $repository)
+    public function __construct(ClienteRepository $repository, ClienteService $service)
     {
         $this->repository = $repository;
+        $this->service = $service;
     }
 
     public function index()
@@ -22,7 +25,7 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        return $this->repository->create($request->all());
+        return $this->service->create($request->all());
     }
 
     public function show($id)
@@ -32,15 +35,11 @@ class ClienteController extends Controller
 
     public function update(Request $request, $id)
     {
-        $input = $request->all();
-        $cliente = $this->repository->find($id);
-        $cliente->update($input);
-        return $cliente;
+        return $this->service->update($request->all(), $id);
     }
 
     public function destroy($id)
     {
-        $cliente = $this->repository->find($id);
-        $cliente->delete();
+        $this->repository->delete($id);
     }
 }
