@@ -30,3 +30,15 @@ $factory->define(angularavel\Entities\Cliente::class, function (Faker\Generator 
         'obs' => $faker->sentence,
     ];
 });
+
+$factory->define(angularavel\Entities\Project::class, function (Faker\Generator $faker) {
+    return [
+        'owner_id' => rand(1, 11),
+        'client_id' => rand(1, 11),
+        'nome' => $faker->word,
+        'description' => $faker->sentence,
+        'progress' => rand(1, 100),
+        'status' => rand(1, 3),
+        'due_date' => $faker->dateTime("now")
+    ];
+});

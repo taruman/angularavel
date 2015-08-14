@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ClienteTableSeeder extends Seeder
+class UserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class ClienteTableSeeder extends Seeder
     public function run()
     {
         //\angularavel\Entities\Cliente::truncate();
-        factory(\angularavel\Entities\Cliente::class, 10)->create();
+        factory(\angularavel\Entities\User::class, 10)->create();
     }
 }
