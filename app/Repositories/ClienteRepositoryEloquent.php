@@ -2,7 +2,7 @@
 
 namespace angularavel\Repositories;
 
-use angularavel\Models\Cliente;
+use angularavel\Entities\Cliente;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 class ClienteRepositoryEloquent extends BaseRepository implements ClienteRepository

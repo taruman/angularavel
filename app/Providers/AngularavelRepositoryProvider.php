@@ -24,5 +24,7 @@ class AngularavelRepositoryProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(\angularavel\Repositories\ClienteRepository::class, \angularavel\Repositories\ClienteRepositoryEloquent::class);
+        
+        $this->app->bind(\angularavel\Repositories\ProjectRepository::class, \angularavel\Repositories\ProjectRepositoryEloquent::class);
     }
 }
