@@ -42,3 +42,11 @@ $factory->define(angularavel\Entities\Project::class, function (Faker\Generator 
         'due_date' => $faker->dateTime("now")
     ];
 });
+
+$factory->define(angularavel\Entities\ProjectNote::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1, 9),
+        'title' => $faker->word,
+        'note' => $faker->paragraph
+    ];
+});
