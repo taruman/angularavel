@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        //\angularavel\Entities\Cliente::truncate();
+        \angularavel\Entities\User::truncate();
         factory(\angularavel\Entities\User::class, 10)->create();
     }
 }

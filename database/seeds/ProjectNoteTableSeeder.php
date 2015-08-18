@@ -11,7 +11,7 @@ class ProjectNoteTableSeeder extends Seeder
      */
     public function run()
     {
-        //\angularavel\Entities\ProjectNote::truncate();
+        \angularavel\Entities\ProjectNote::truncate();
         factory(\angularavel\Entities\ProjectNote::class, 10)->create();
     }
 }
