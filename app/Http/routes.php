@@ -19,7 +19,7 @@ Route::post('oauth/access_token', function () {
     return \Illuminate\Support\Facades\Response::json(\LucaDegasperi\OAuth2Server\Facades\Authorizer::issueAccessToken());
 });
 
-Route::get('cliente', 'ClienteController@index');
+Route::get('cliente', ["middleware" => "oauth", "uses" => 'ClienteController@index']);
 Route::post('cliente', 'ClienteController@store');
 Route::get('cliente/{id}', 'ClienteController@show');
 Route::delete('cliente/{id}', 'ClienteController@destroy');
