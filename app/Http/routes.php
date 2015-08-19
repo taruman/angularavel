@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::post('oauth/access_token', function () {
-    return \Illuminate\Support\Facades\Response::json(\LucaDegasperi\OAuth2Server\Facades\Authorizer::issueAccessToken());
+    return Response::json(Authorizer::issueAccessToken());
 });
 
 Route::get('cliente', ["middleware" => "oauth", "uses" => 'ClienteController@index']);
