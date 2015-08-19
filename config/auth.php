@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => angularavel\User::class,
+    'model' => angularavel\Entities\User::class,
 
     /*
     |--------------------------------------------------------------------------
