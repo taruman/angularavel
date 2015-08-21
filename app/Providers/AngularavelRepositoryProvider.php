@@ -28,5 +28,7 @@ class AngularavelRepositoryProvider extends ServiceProvider
         $this->app->bind(\angularavel\Repositories\ProjectRepository::class, \angularavel\Repositories\ProjectRepositoryEloquent::class);
         
         $this->app->bind(\angularavel\Repositories\ProjectNoteRepository::class, \angularavel\Repositories\ProjectNoteRepositoryEloquent::class);
+        
+        $this->app->bind(\angularavel\Repositories\ProjectTaskRepository::class, \angularavel\Repositories\ProjectTaskRepositoryEloquent::class);
     }
 }

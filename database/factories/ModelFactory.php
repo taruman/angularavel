@@ -33,8 +33,8 @@ $factory->define(angularavel\Entities\Cliente::class, function (Faker\Generator 
 
 $factory->define(angularavel\Entities\Project::class, function (Faker\Generator $faker) {
     return [
-        'owner_id' => rand(1, 11),
-        'client_id' => rand(1, 11),
+        'owner_id' => rand(1, 10),
+        'client_id' => rand(1, 10),
         'nome' => $faker->word,
         'description' => $faker->sentence,
         'progress' => rand(1, 100),
@@ -45,8 +45,18 @@ $factory->define(angularavel\Entities\Project::class, function (Faker\Generator 
 
 $factory->define(angularavel\Entities\ProjectNote::class, function (Faker\Generator $faker) {
     return [
-        'project_id' => rand(1, 9),
+        'project_id' => rand(1, 10),
         'title' => $faker->word,
         'note' => $faker->paragraph
+    ];
+});
+
+$factory->define(angularavel\Entities\ProjectTask::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1, 10),
+        'name' => $faker->word,
+        'status' => rand(1, 3),
+        'due_date' => $faker->dateTime(),
+        'start_date' => $faker->dateTime()
     ];
 });
