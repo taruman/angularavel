@@ -60,3 +60,10 @@ $factory->define(angularavel\Entities\ProjectTask::class, function (Faker\Genera
         'start_date' => $faker->dateTime()
     ];
 });
+
+$factory->define(angularavel\Entities\ProjectMembers::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1, 10),
+        'user_id' => rand(1, 10)
+    ];
+});
