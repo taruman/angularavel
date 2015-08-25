@@ -62,25 +62,14 @@ class ProjectService {
         
     }
     
-    function removeMember($id) {
-        
-        return $this->members_repository->delete($id);     
-              
-    }
-    
-    function isMember($id_user, $id_project) {
+    function isMember($id, $userId) {
         
         $member = $this->members_repository->findWhere([
-            'user_id'=>$id_user,
-            'project_id'=>$id_project
+            'user_id'=>$userId,
+            'project_id'=>$id
         ]); 
         
-        if (count($member) > 0)
-        {
-            return true;
-        }
-        
-        return false;
+        return $member;
               
     }    
 }

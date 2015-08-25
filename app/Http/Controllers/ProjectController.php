@@ -50,4 +50,22 @@ class ProjectController extends Controller
     {
         $this->repository->delete($id);
     }
+    
+    function addMember(Request $data) {   
+        
+        return $this->service->addMember($data->all());
+        
+    }
+    
+    function removeMember($id) {
+        
+        $this->members_repository->delete($id);     
+              
+    }
+    
+    function isMember($id, $userId) {
+        
+        return $this->service->isMember($id, $userId); 
+              
+    }   
 }
