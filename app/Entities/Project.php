@@ -29,7 +29,7 @@ class Project extends Model implements Transformable
     } 
     
     public function members() {
-        return $this->hasMany(ProjectMembers::class, 'project_id', 'id');
+        return $this->belongsToMany(User::class, 'project_members', 'project_id', 'user_id');
     }     
     
     public function users() {
