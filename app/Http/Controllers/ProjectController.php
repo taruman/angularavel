@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use angularavel\Repositories\ProjectRepository;
 use angularavel\Repositories\ProjectMembersRepository;
 use angularavel\Services\ProjectService;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class ProjectController extends Controller
 {
@@ -37,7 +38,14 @@ class ProjectController extends Controller
     }
 
     public function show($id)
-    {
+    {     
+        $user_id = Authorizer::getResourceOwnerId();
+        
+        if($this->repository->isOwner($id, $user_id) == false)
+        {
+            return ["success" => false];
+        }        
+        
         return $this->repository->with(["users", "clientes"])->find($id);
     }
 
