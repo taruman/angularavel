@@ -30,7 +30,7 @@ class ProjectController extends Controller
     public function members($id)
     {
         $project = $this->repository->find($id);
-        return $project->members;
+        return $project["data"]["members"];
         //return $this->members_repository->with(["users"])->findByField('project_id', $id);
         //qual é a melhor forma?
     }    
