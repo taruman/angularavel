@@ -7,17 +7,24 @@ use \angularavel\Validators\ProjectValidator;
 use \angularavel\Validators\ProjectMembersValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
+
 class ProjectService {
     private $repository;
     private $members_repository;
     private $validator;
     private $members_validator;
+    private $filesystem;
+    private $storage;
     
-    public function __construct(ProjectRepository $repository, ProjectValidator $validator, ProjectMembersRepository $members_repository, ProjectMembersValidator $members_validator) {
+    public function __construct(ProjectRepository $repository, ProjectValidator $validator, ProjectMembersRepository $members_repository, ProjectMembersValidator $members_validator, Filesystem $filesystem, Storage $storage) {
         $this->repository = $repository;
         $this->members_repository = $members_repository;
         $this->validator = $validator;
         $this->members_validator = $members_validator;
+        $this->filesystem = $filesystem;
+        $this->storage = $storage;
     }
     
     public function create(array $data) {
@@ -71,5 +78,14 @@ class ProjectService {
         
         return $member;
               
-    }    
+    }   
+    
+    function createFile(array $data) 
+    {
+        
+        $project = $this->repository->skipPresenter()->find($data["project_id"]);
+        $project_file = $project->files()->create($data);
+        $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));
+              
+    }     
 }
