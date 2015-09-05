@@ -6,6 +6,7 @@ use angularavel\Repositories\ProjectMembersRepository;
 use \angularavel\Validators\ProjectValidator;
 use \angularavel\Validators\ProjectMembersValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
@@ -86,5 +87,28 @@ class ProjectService {
         $project = $this->repository->skipPresenter()->find($data["project_id"]);
         $project_file = $project->files()->create($data);
         $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));              
-    }     
+    }  
+    
+    //METODOS USADOS EM CONJUNTO PARA VERIFICAR AUTORIZACAO
+    private function isOwner($projectId)
+    {
+        $userId = Authorizer::getResourceOwnerId();        
+        return $this->repository->isOwner($projectId, $userId);        
+    }
+    
+    private function hasMember($projectId)
+    {
+        $userId = Authorizer::getResourceOwnerId();        
+        return $this->repository->hasMember($projectId, $userId);        
+    } 
+    
+    public function checkProjectPermissions($projectId)
+    {
+        if($this->isOwner($projectId) || $this->hasMember($projectId))
+        {
+            return true;
+        }
+        
+        return false;
+    }    
 }

@@ -32,7 +32,7 @@ class ProjectController extends Controller
 
     public function show($id)
     {             
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }        
@@ -42,7 +42,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }          
@@ -52,7 +52,7 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }          
@@ -63,7 +63,7 @@ class ProjectController extends Controller
     //MANIPULACAO DOS MEMBROS DO PROJETO
     public function members($id)
     {        
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }         
@@ -74,7 +74,7 @@ class ProjectController extends Controller
     
     function addMember(Request $data, $id) 
     {    
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }          
@@ -83,7 +83,7 @@ class ProjectController extends Controller
     
     function removeMember($id, $userId) 
     {        
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }         
@@ -92,33 +92,10 @@ class ProjectController extends Controller
     
     function isMember($id, $userId) 
     {        
-        if($this->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }         
         return $this->service->isMember($id, $userId);               
-    }
-    
-    //METODOS USADOS EM CONJUNTO PARA VERIFICAR AUTORIZACAO
-    private function isOwner($projectId)
-    {
-        $userId = Authorizer::getResourceOwnerId();        
-        return $this->repository->isOwner($projectId, $userId);        
-    }
-    
-    private function hasMember($projectId)
-    {
-        $userId = Authorizer::getResourceOwnerId();        
-        return $this->repository->hasMember($projectId, $userId);        
-    } 
-    
-    public function checkProjectPermissions($projectId)
-    {
-        if($this->isOwner($projectId))
-        {
-            return true;
-        }
-        
-        return false;
     }
 }
