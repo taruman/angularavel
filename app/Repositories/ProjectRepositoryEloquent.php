@@ -30,9 +30,11 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
         $this->pushCriteria( app(RequestCriteria::class) );
     }
     
+    //passar para o projectService, para tentar usar o skipPresenter
     public function isOwner($project_id, $user_id)
     {
-        if(count($this->findWhere(array("id" => $project_id, "owner_id" => $user_id))) > 0)
+        $projeto = $this->findWhere(array("id" => $project_id, "owner_id" => $user_id));
+        if(count($projeto['data']) > 0)
         {
             return true;
         }
@@ -40,13 +42,14 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
         return false;
     }
     
+    //passar para o projectService, para tentar usar o skipPresenter
     public function hasMember($project_id, $user_id)
     {        
         $project = $this->find($project_id);
         
-        foreach ($project->members AS $member)
+        foreach ($project["data"]["members"]["data"] AS $member)
         {
-            if($member->id == $user_id)
+            if($member["member_id"] == $user_id)
             {
                 return true;
             }

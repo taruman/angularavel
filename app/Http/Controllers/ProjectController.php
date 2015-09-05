@@ -4,7 +4,6 @@ namespace angularavel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use angularavel\Repositories\ProjectRepository;
-use angularavel\Repositories\ProjectMembersRepository;
 use angularavel\Services\ProjectService;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
@@ -13,27 +12,18 @@ class ProjectController extends Controller
 
     private $repository;
     private $service;
-    private $members_repository;
 
-    public function __construct(ProjectRepository $repository, ProjectService $service, ProjectMembersRepository $members_repository)
+    public function __construct(ProjectRepository $repository, ProjectService $service)
     {
         $this->repository = $repository;
         $this->service = $service;
-        $this->members_repository = $members_repository;
     }
 
+    //MANIPULACAO DOS PROJETOS
     public function index()
     {
         return $this->repository->with(["users", "clientes"])->findWhere(array("owner_id" => Authorizer::getResourceOwnerId()));
-    }
-    
-    public function members($id)
-    {
-        $project = $this->repository->find($id);
-        return $project["data"]["members"];
-        //return $this->members_repository->with(["users"])->findByField('project_id', $id);
-        //qual é a melhor forma?
-    }    
+    }     
 
     public function store(Request $request)
     {
@@ -52,7 +42,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        if($this->isOwner($id) == false)
+        if($this->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }          
@@ -62,7 +52,7 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
-        if($this->isOwner($id) == false)
+        if($this->checkProjectPermissions($id) == false)
         {
             return ["success" => false];
         }          
@@ -70,40 +60,61 @@ class ProjectController extends Controller
         $this->repository->delete($id);
     }
     
-    function addMember(Request $data) {   
+    //MANIPULACAO DOS MEMBROS DO PROJETO
+    public function members($id)
+    {        
+        if($this->checkProjectPermissions($id) == false)
+        {
+            return ["success" => false];
+        }         
         
-        return $this->service->addMember($data->all());
-        
+        $project = $this->repository->find($id);
+        return $project["data"]["members"]["data"];
+    }     
+    
+    function addMember(Request $data, $id) 
+    {    
+        if($this->checkProjectPermissions($id) == false)
+        {
+            return ["success" => false];
+        }          
+        return $this->service->addMember($data->all());        
     }
     
-    function removeMember($id) {
-        
-        $this->members_repository->delete($id);     
-              
+    function removeMember($id, $userId) 
+    {        
+        if($this->checkProjectPermissions($id) == false)
+        {
+            return ["success" => false];
+        }         
+        $this->service->removeMember($id, $userId);                   
     }
     
-    //rever este método, tendo em vista o hasMember abaixo
-    function isMember($id, $userId) {
-        
-        return $this->service->isMember($id, $userId); 
-              
+    function isMember($id, $userId) 
+    {        
+        if($this->checkProjectPermissions($id) == false)
+        {
+            return ["success" => false];
+        }         
+        return $this->service->isMember($id, $userId);               
     }
     
-    function isOwner($projectId)
+    //METODOS USADOS EM CONJUNTO PARA VERIFICAR AUTORIZACAO
+    private function isOwner($projectId)
     {
         $userId = Authorizer::getResourceOwnerId();        
         return $this->repository->isOwner($projectId, $userId);        
     }
     
-    function hasMember($projectId)
+    private function hasMember($projectId)
     {
         $userId = Authorizer::getResourceOwnerId();        
         return $this->repository->hasMember($projectId, $userId);        
     } 
     
-    function checkProjectPermissions($projectId)
+    public function checkProjectPermissions($projectId)
     {
-        if($this->isOwner($projectId) || $this->hasMember($projectId))
+        if($this->isOwner($projectId))
         {
             return true;
         }

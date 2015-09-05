@@ -28,7 +28,6 @@ class ProjectService {
     }
     
     public function create(array $data) {
-        
         try {
             $this->validator->with($data)->passesOrFail();
             return $this->repository->create($data);
@@ -38,11 +37,9 @@ class ProjectService {
               "message" => $exc->getMessageBag()
             ];
         }
-
     }
     
-    function update(array $data, $id) {
-        
+    function update(array $data, $id) {        
         try {
             $this->validator->with($data)->passesOrFail();
             return $this->repository->update($data, $id);
@@ -51,12 +48,19 @@ class ProjectService {
               "error" => true,
               "message" => $exc->getMessageBag()
             ];
-        }      
-              
+        }                    
     }
     
-    function addMember(array $data) {   
-        
+    function removeMember($id, $userId) 
+    {        
+        $member = $this->members_repository->findWhere([
+            'user_id'=>$userId,
+            'project_id'=>$id
+        ]); 
+        $this->members_repository->delete($member[0]["original"]["id"]);                   
+    }    
+    
+    function addMember(array $data) {           
         try {
             $this->members_validator->with($data)->passesOrFail();
             return $this->members_repository->create($data);
@@ -65,27 +69,22 @@ class ProjectService {
               "error" => true,
               "message" => $exc->getMessageBag()
             ];
-        }
-        
+        }        
     }
     
-    function isMember($id, $userId) {
-        
+    function isMember($id, $userId) {        
         $member = $this->members_repository->findWhere([
             'user_id'=>$userId,
             'project_id'=>$id
         ]); 
         
-        return $member;
-              
+        return $member;              
     }   
     
     function createFile(array $data) 
-    {
-        
+    {        
         $project = $this->repository->skipPresenter()->find($data["project_id"]);
         $project_file = $project->files()->create($data);
-        $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));
-              
+        $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));              
     }     
 }
