@@ -11,6 +11,7 @@ namespace angularavel\Transformers;
 use angularavel\Entities\Project;
 use League\Fractal\TransformerAbstract;
 use angularavel\Transformers\ProjectMemberTransformer;
+use angularavel\Transformers\ProjectNoteTransformer;
 
 /**
  * Description of ProjectTransformer
@@ -20,7 +21,7 @@ use angularavel\Transformers\ProjectMemberTransformer;
 class ProjectTransformer extends TransformerAbstract 
 {
     
-    protected $defaultIncludes = ["members"];
+    protected $defaultIncludes = ["members", "notes"];
 
 
     public function transform(Project $project) 
@@ -40,4 +41,8 @@ class ProjectTransformer extends TransformerAbstract
     public function includeMembers(Project $project) {
         return $this->collection($project->members, new ProjectMemberTransformer());
     }
+    
+    public function includeNotes(Project $project) {
+        return $this->collection($project->notes, new ProjectNoteTransformer());
+    }    
 }
