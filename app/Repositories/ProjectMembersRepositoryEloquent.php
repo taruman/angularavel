@@ -28,5 +28,5 @@ class ProjectMembersRepositoryEloquent extends BaseRepository implements Project
     public function boot()
     {
         $this->pushCriteria( app(RequestCriteria::class) );
-    }
+    }  
 }
