@@ -21,7 +21,7 @@ use angularavel\Transformers\ProjectNoteTransformer;
 class ProjectTransformer extends TransformerAbstract 
 {
     
-    protected $defaultIncludes = ["members", "notes"];
+    protected $defaultIncludes = ["members", "notes", "tasks"];
 
 
     public function transform(Project $project) 
@@ -34,7 +34,8 @@ class ProjectTransformer extends TransformerAbstract
             "description" => $project->description,
             "progress" => $project->progress,
             "status" => $project->status,
-            "due_date" => $project->due_date
+            "due_date" => $project->due_date,
+            "clientes" => $project->clientes
         ];
     }
     
@@ -45,4 +46,8 @@ class ProjectTransformer extends TransformerAbstract
     public function includeNotes(Project $project) {
         return $this->collection($project->notes, new ProjectNoteTransformer());
     }    
+    
+    public function includeTasks(Project $project) {
+        return $this->collection($project->tasks, new ProjectTaskTransformer());
+    }     
 }
