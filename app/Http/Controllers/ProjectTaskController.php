@@ -30,9 +30,9 @@ class ProjectTaskController extends Controller
         return $this->repository->findWhere(["project_id" => $id]);
     }
 
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
-        if($this->project_service->checkProjectPermissions($id) == false)
+        if($this->project_service->checkProjectPermissions($request->input("project_id")) == false)
         {
             return ["success" => false];
         }         
@@ -48,14 +48,13 @@ class ProjectTaskController extends Controller
         return $this->repository->findWhere(["project_id" => $id, "id" => $taskId]);
     }
 
-    //são realmente 3 parâmetros?
-    public function update(Request $request, $id, $taskId)
+    public function update(Request $request)
     {
-        if($this->project_service->checkProjectPermissions($id) == false)
+        if($this->project_service->checkProjectPermissions($request->input("project_id")) == false)
         {
             return ["success" => false];
         }         
-        return $this->service->update($request->all(), $taskId);
+        return $this->service->update($request->all(), $request->input("id"));
     }
 
     public function destroy($id, $taskId)

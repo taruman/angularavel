@@ -40,14 +40,14 @@ class ProjectController extends Controller
         return $this->repository->with(["users", "clientes"])->find($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        if($this->service->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($request->input("project_id")) == false)
         {
             return ["success" => false];
         }          
         
-        return $this->service->update($request->all(), $id);
+        return $this->service->update($request->all(), $request->input("id"));
     }
 
     public function destroy($id)
@@ -72,13 +72,13 @@ class ProjectController extends Controller
         return $project["data"]["members"]["data"];
     }     
     
-    function addMember(Request $data, $id) 
+    function addMember(Request $request) 
     {    
-        if($this->service->checkProjectPermissions($id) == false)
+        if($this->service->checkProjectPermissions($request->input("project_id")) == false)
         {
             return ["success" => false];
         }          
-        return $this->service->addMember($data->all());        
+        return $this->service->addMember($request->all());        
     }
     
     function removeMember($id, $userId) 
