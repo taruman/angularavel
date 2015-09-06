@@ -63,6 +63,6 @@ class ProjectTaskController extends Controller
         {
             return ["success" => false];
         }         
-        $this->repository->delete($taskId);
+        $this->service->removeTask($id, $taskId);
     }
 }

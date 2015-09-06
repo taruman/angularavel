@@ -41,4 +41,17 @@ class ProjectNoteService {
         }      
               
     }
+    
+    function removeNote($id, $noteId) 
+    {        
+        $note = $this->repository->skipPresenter()->findWhere([
+            'id'=>$noteId,
+            'project_id'=>$id
+        ]); 
+        
+        if (count($note) > 0)
+        {
+            $this->repository->delete($noteId);
+        }                           
+    }     
 }

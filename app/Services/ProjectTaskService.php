@@ -41,4 +41,17 @@ class ProjectTaskService {
         }      
               
     }
+    
+    function removeTask($id, $taskId) 
+    {        
+        $task = $this->repository->skipPresenter()->findWhere([
+            'id'=>$taskId,
+            'project_id'=>$id
+        ]); 
+        
+        if (count($task) > 0)
+        {
+            $this->repository->delete($taskId);
+        }                           
+    }      
 }

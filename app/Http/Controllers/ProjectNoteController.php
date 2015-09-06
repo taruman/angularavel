@@ -63,6 +63,6 @@ class ProjectNoteController extends Controller
         {
             return ["success" => false];
         }            
-        $this->repository->delete($noteId);
+        $this->service->removeNote($id, $noteId);
     }
 }
