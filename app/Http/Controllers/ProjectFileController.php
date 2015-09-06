@@ -20,6 +20,11 @@ class ProjectFileController extends Controller
 
     public function store(Request $request)
     {
+        if($this->service->checkProjectPermissions($request->project_id) == false)
+        {
+            return ["success" => false];
+        }          
+        
         $file = $request->file("file");
         $extension = $file->getClientOriginalExtension();
                 
@@ -31,5 +36,15 @@ class ProjectFileController extends Controller
         
         $this->service->createFile($data);                
     }
+    
+    public function destroy($id, $fileId)
+    {
+        if($this->service->checkProjectPermissions($id) == false)
+        {
+            return ["success" => false];
+        }          
+        
+        $this->service->removeFile($id, $fileId);
+    }    
 
 }

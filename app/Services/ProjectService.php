@@ -5,6 +5,7 @@ use angularavel\Repositories\ProjectRepository;
 use angularavel\Repositories\ProjectMembersRepository;
 use \angularavel\Validators\ProjectValidator;
 use \angularavel\Validators\ProjectMembersValidator;
+use \angularavel\Validators\ProjectFileValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
@@ -16,14 +17,16 @@ class ProjectService {
     private $members_repository;
     private $validator;
     private $members_validator;
+    private $file_validator;
     private $filesystem;
     private $storage;
     
-    public function __construct(ProjectRepository $repository, ProjectValidator $validator, ProjectMembersRepository $members_repository, ProjectMembersValidator $members_validator, Filesystem $filesystem, Storage $storage) {
+    public function __construct(ProjectRepository $repository, ProjectValidator $validator, ProjectFileValidator $file_validator, ProjectMembersRepository $members_repository, ProjectMembersValidator $members_validator, Filesystem $filesystem, Storage $storage) {
         $this->repository = $repository;
         $this->members_repository = $members_repository;
         $this->validator = $validator;
         $this->members_validator = $members_validator;
+        $this->file_validator = $file_validator;        
         $this->filesystem = $filesystem;
         $this->storage = $storage;
     }
@@ -58,7 +61,11 @@ class ProjectService {
             'user_id'=>$userId,
             'project_id'=>$id
         ]); 
-        $this->members_repository->delete($member[0]["original"]["id"]);                   
+        
+        if (count($member) > 0)
+        {
+            $this->members_repository->delete($member[0]["original"]["id"]);
+        }                           
     }    
     
     function addMember(array $data) {           
@@ -83,11 +90,32 @@ class ProjectService {
     }   
     
     function createFile(array $data) 
+    {   
+        try {
+            $this->file_validator->with($data)->passesOrFail();
+            $project = $this->repository->skipPresenter()->find($data["project_id"]);
+            $project_file = $project->files()->create($data);
+            $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));             
+            return $project_file;
+        } catch (ValidatorException $exc) {
+            return [
+              "error" => true,
+              "message" => $exc->getMessageBag()
+            ];
+        }                      
+    } 
+    
+    function removeFile($id, $fileId) 
     {        
-        $project = $this->repository->skipPresenter()->find($data["project_id"]);
-        $project_file = $project->files()->create($data);
-        $this->storage->put($project_file->id.".".$data["extension"], $this->filesystem->get($data["file"]));              
-    }  
+        $project = $this->repository->skipPresenter()->find($id);        
+        $project_file = $project->files()->find($fileId); 
+        
+        if (count($project_file) > 0)
+        {
+            $project->files()->find($fileId)->delete();
+            $this->storage->delete($project_file->id.".".$project_file->extension);
+        }          
+    }     
     
     //METODOS USADOS EM CONJUNTO PARA VERIFICAR AUTORIZACAO
     private function isOwner($projectId)
