@@ -128,15 +128,28 @@ class ProjectService {
     {
         $userId = Authorizer::getResourceOwnerId();        
         return $this->repository->hasMember($projectId, $userId);        
-    } 
+    }
+    
+    private function hasParam($param) {
+        if (!isset($param) || empty($param))
+        {
+            return false;
+        }
+        return true;
+    }
     
     public function checkProjectPermissions($projectId)
     {
+        if (!$this->hasParam($projectId))
+        {
+            return false;
+        }
+        
         if($this->isOwner($projectId) || $this->hasMember($projectId))
         {
             return true;
         }
         
         return false;
-    }    
+    }   
 }
