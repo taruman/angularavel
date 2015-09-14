@@ -25,16 +25,16 @@ class ProjectFileController extends Controller
             return ["success" => false];
         }          
         
-        $file = $request->file("file");
-        $extension = $file->getClientOriginalExtension();
+        //$file = $request->file("file");
+        //$extension = $file->getClientOriginalExtension();
                 
-        $data["file"] = $file;
-        $data["extension"] = $extension;
+        $data["file"] = $request->file("file");
+        $data["extension"] = $request->extension;
         $data["name"] = $request->name;
         $data["project_id"] = $request->project_id;
         $data["description"] = $request->description;
         
-        $this->service->createFile($data);                
+        return $this->service->createFile($data);                
     }
     
     public function destroy($id, $fileId)
